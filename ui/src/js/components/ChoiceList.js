@@ -3,11 +3,15 @@ import React from "react";
 import { Choice } from "./Choice";
 
 export function ChoiceList(props) {
-  return (
-    <>
-      {props.choices.map(c => (
-          <Choice key={c} choice={c} />
-      ))}
-    </>
-  );
+    console.log(props.choices)
+  if(props.choices == undefined)
+  {
+      return (<>Hell</>);
+  } else {
+    return (
+        <>
+          fuck
+        </>
+      );  
+  }
 }
