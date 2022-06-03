@@ -4,9 +4,10 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import { FormButton } from "./FormButton";
 import { ChoiceList } from "./ChoiceList";
 
-//import { FieldService } from "../models/FieldService.js";
+import { FieldService } from "../models/FieldService.js";
 
 export function FieldForm() {
+    const areas = ["Asia", "Australia", "Europe", "Americas"];
     return (
       <>
         <Form className="p-3">
@@ -75,7 +76,7 @@ export function FieldForm() {
               md={{ span: 10, offset: 2 }}
               className="my-3"
             >
-                <ChoiceList />
+                <ChoiceList choices={areas}/>
             </Col>
           </Form.Group>
           <Form.Group

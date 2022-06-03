@@ -2,10 +2,12 @@ import '../../stylesheets/App.css';
 import React from "react";
 import { Choice } from "./Choice";
 
-export function ChoiceList() {
+export function ChoiceList(props) {
   return (
     <>
-      <Choice />
+      {props.choices.map(c => (
+          <Choice key={c} choice={c} />
+      ))}
     </>
   );
 }
