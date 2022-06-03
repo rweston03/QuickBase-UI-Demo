@@ -1,16 +1,19 @@
 import '../../stylesheets/App.css';
-import React from "react";
+import { React, useContext } from "react";
+import { FormContext } from './FieldForm';
 import { Choice } from "./Choice";
 
 export function ChoiceList(props) {
-    console.log(props.choices)
-  if(props.choices == undefined)
+    let {formdata, setFormData} = useContext(FormContext);
+    let choices = formdata.choices
+    console.log(formdata.choices)
+  if(choices == undefined)
   {
-      return (<>Hell</>);
+      return (<>No Choices Entered</>);
   } else {
     return (
         <>
-          fuck
+          {choices.map(c => {return <Choice key={c} choice={c} />})}
         </>
       );  
   }
