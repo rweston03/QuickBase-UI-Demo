@@ -5,8 +5,11 @@ import { Choice } from "./Choice";
 
 export function ChoiceList(props) {
     let {formdata, setFormData} = useContext(FormContext);
-    let choices = formdata.choices
-    console.log(formdata.choices)
+    let choices = []
+    if (formdata != undefined && formdata.choices !== undefined && formdata.choices != []) {
+      choices = [...formdata.choices];
+    }
+    console.log(choices);
   if(choices == undefined)
   {
       return (<>No Choices Entered</>);

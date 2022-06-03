@@ -1,5 +1,5 @@
 import '../../stylesheets/App.css';
-import { React, useState, createContext } from "react";
+import { React, useState, createContext, useEffect } from "react";
 import { Form, Row, Col, Button, InputGroup, FormControl } from "react-bootstrap";
 import { FormButton } from "./FormButton";
 import { ChoiceList } from "./ChoiceList";
@@ -7,32 +7,39 @@ import { ChoiceList } from "./ChoiceList";
 import { FieldService } from "../models/FieldService.js";
 
 export const FormContext = createContext();
-const initFormData = new FieldService();
 export function FieldForm() {
-    const [formdata, setFormData] = useState(initFormData);
+    const [formdata, setFormData] = useState();
     const [errorLabel, setErrorLabel] = useState(false);
     const [errorDefault, setErrorDefault] = useState(false);
     const [errorChoices, setErrorChoices] = useState(false);
     const [validated, setValidated] = useState(false);
     const [choice, setChoice] = useState("");
 
+    useEffect(() => {
+        if(!formdata) {
+            setFormData(new FieldService);
+        }
+    })
 
     // Choice input handler
     const onChoiceKeyPress = (event) => {
         let newChoice = choice + String.fromCharCode(event.which)
         setChoice(newChoice)
-/*         if (event.which == 13) {
+        if (event.which == 13) {
             // Check choice distinct
             newChoice = newChoice.trim()
             if (formdata.choices.includes(newChoice)) {
                 setErrorChoices(true);
             } else {
-                setFormData(formdata.choices.push(newChoice))
-                console.log(formdata.choices)
+                let newChoices = formdata.choices;
+                newChoices.push(newChoice);
+                formdata.choices = newChoices
+                setFormData(formdata);
+                setChoice("");
             }
 
             // Check choices array length <= 50 && > 2
-        } */
+        }
         console.log("Keypress Handler: " + formdata.choices) 
     }
 
@@ -94,7 +101,7 @@ export function FieldForm() {
                 Label
                 </Form.Label>
                 <Col sm={9} md={10}>
-                <Form.Control type="text" placeholder="Label" required isValid={formdata.label && !errorLabel}/>
+                <Form.Control type="text" placeholder="Label" required />
                 <Form.Control.Feedback type="invalid">Label is required.</Form.Control.Feedback>
                 </Col>
             </Form.Group>
@@ -127,7 +134,7 @@ export function FieldForm() {
                 Default Value
                 </Form.Label>
                 <Col sm={9} md={10}>
-                <Form.Control type="text" placeholder="Default Value" required isValid={formdata.default && !errorDefault} />
+                <Form.Control type="text" placeholder="Default Value" required />
                 <Form.Control.Feedback type="invalid">Default value is required.</Form.Control.Feedback>
                 </Col>
             </Form.Group>
@@ -140,7 +147,14 @@ export function FieldForm() {
                 Choices
                 </Form.Label>
                 <Col sm={9} md={10}>
-                    <InputGroup className="mb-3">
+                    <Form.Control type="text" placeholder="Choices" required onKeyPress={onChoiceKeyPress}/>
+                </Col>
+                <Col sm={{ span: 9, offset: 3 }} md={{ span: 10, offset: 2 }}>
+                    <Form.Text className="text-muted">
+                    Press "enter" key to add a choice.
+                    </Form.Text>
+                </Col>
+{/*                     <InputGroup className="mb-3">
                         <FormControl
                         placeholder="Choice"
                         aria-describedby="basic-addon2"
@@ -150,8 +164,7 @@ export function FieldForm() {
                         <Button className="bg-teal" id="button-addon2" onClick={onChoiceAdd}>
                         Add Choice
                         </Button>
-                    </InputGroup>
-                </Col>
+                    </InputGroup> */}
                 <Col sm={{ span: 9, offset: 3 }} md={{ span: 10, offset: 2 }}>
                 <Form.Control.Feedback type="invalid">Choice must be unique and under 40 characters.</Form.Control.Feedback>
                 </Col>
@@ -160,7 +173,7 @@ export function FieldForm() {
                 md={{ span: 10, offset: 2 }}
                 className="my-3"
                 >
-                    <ChoiceList choices={formdata.choices} />
+                    <ChoiceList choices={formdata ? formdata.choices : []} />
                 </Col>
             </Form.Group>
             <Form.Group
